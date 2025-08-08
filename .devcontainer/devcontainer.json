@@ -1,0 +1,29 @@
+{
+  "name": "Polkadot Smart Contract Development",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/project,type=bind",
+  "workspaceFolder": "/project",
+  "containerEnv": {
+    "PROJECT_DIR": "/project"
+  },
+  "postAttachCommand": "bash -c 'devtools setup-devcontainer && devtools setup-keypair'",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "rust-lang.rust-analyzer",
+        "tamasfe.even-better-toml",
+        "esbenp.prettier-vscode",
+        "NomicFoundation.hardhat-solidity",
+        "dbaeumer.vscode-eslint"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "solidity.formatter": "prettier"
+      }
+    }
+  }
+}
