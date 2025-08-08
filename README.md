@@ -11,7 +11,7 @@ A ready-to-code DevContainer for building, testing, and deploying smart contract
 
 ### Prerequisites
 - Docker Desktop (or compatible)
-- VS Code + Dev Containers extension, or GitHub Codespaces
+- VS Code + Dev Containers extension, GitHub Codespaces, or Gitpod
 
 ### Quick start
 
@@ -33,6 +33,10 @@ Option B — clone this template repo and open in VS Code:
    - For Hardhat: stored via `hardhat vars` as `TEST_ACC_PRIVATE_KEY`.
    - For Foundry: imported into the local keystore as the `paseo` account.
 5. Use the workflows below to compile, test, run a local node, and deploy.
+
+### Codespaces and Gitpod
+- **GitHub Codespaces**: After adding the `.devcontainer/` to your repository (via the Quick start), open your repo on GitHub, click Code → “Create codespace on main”. Codespaces will build and start this DevContainer automatically.
+- **Gitpod**: After adding the `.devcontainer/` to your repository, open `https://gitpod.io/#<your-repo-url>` (or use the Gitpod browser extension). Gitpod detects and uses the `.devcontainer` configuration out of the box.
 
 ### Hardhat workflow
 Key files (created by init):
