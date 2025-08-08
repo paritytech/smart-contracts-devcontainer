@@ -14,6 +14,16 @@ A ready-to-code DevContainer for building, testing, and deploying smart contract
 - VS Code + Dev Containers extension, or GitHub Codespaces
 
 ### Quick start
+
+Option A — bring this DevContainer into any repo/folder (recommended):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/paritytech/smart-contracts-devcontainer/main/.devcontainer/fetch-devcontainer.sh | bash -s --
+```
+
+Then open the folder in VS Code and “Reopen in Container”. On first attach, choose **Hardhat** or **Foundry** when prompted.
+
+Option B — clone this template repo and open in VS Code:
 1. Open this repository in VS Code.
 2. “Reopen in Container” when prompted (or use the Dev Containers command).
 3. On first attach, you’ll be asked to initialize **Hardhat** or **Foundry**:
