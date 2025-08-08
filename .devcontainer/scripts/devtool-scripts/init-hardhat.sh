@@ -4,8 +4,8 @@ if ! compgen -G "$PROJECT_DIR/hardhat.config.*" > /dev/null; then
     echo -e "${GREEN}✓ Copying project template files...${STYLE_END}"
     
     # Fetch template project
-    REPO="https://github.com/paritytech/DevEx-DevRel.git"
-    SUBDIR=".devcontainer/smart-contracts/init-hardhat"
+    REPO="https://github.com/paritytech/smart-contracts-devcontainer.git"
+    SUBDIR=".devcontainer/init-hardhat"
     DEST="$PROJECT_DIR"
     TMP="$(mktemp -d)"
     git clone --depth=1 --filter=blob:none --sparse "$REPO" "$TMP"
