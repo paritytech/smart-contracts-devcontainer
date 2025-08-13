@@ -1,11 +1,11 @@
 ### Polkadot Smart Contracts DevContainer Template
 
-A ready-to-code DevContainer for building, testing, and deploying smart contracts for Polkadot using either Hardhat or Foundry. It includes PolkaVM tooling, a local Substrate node + ETH-RPC adapter, key management helpers, and opinionated defaults to get you productive fast.
+A ready-to-code DevContainer for building, testing, and deploying smart contracts for Polkadot using either Hardhat or Foundry. It includes PolkaVM tooling, a local Dev node + ETH-RPC adapter, key management helpers, and opinionated defaults to get you productive fast.
 
 ### What’s inside
 - **Hardhat preset**: `@parity/hardhat-polkadot` + `resolc` configured, sample contract/tests/ignition module, networks for local node and Polkadot Hub Testnet.
 - **Foundry (Polkadot toolchain)**: Installed via `foundryup-polkadot` (includes `forge`, `cast`, `anvil`).
-- **Local node tooling**: `substrate-node` and `eth-rpc` binaries available in the container for PolkaVM local development.
+- **Local node tooling**: `dev-node` and `eth-rpc` binaries available in the container for PolkaVM local development.
 - **Key management**: `subkey` preinstalled; first attach auto-creates/imports a dev ECDSA key for testing and wires it into Hardhat or Foundry.
 - **Dev tools**: Convenience `devtools` CLI for initializing projects, setting up the container, keypair, and checking balances.
 
@@ -48,7 +48,7 @@ Common commands (run inside the container):
 ```bash
 npx hardhat compile
 npx hardhat test
-# Starts a local Substrate node + ETH-RPC adapter at 127.0.0.1:8545
+# Starts a local Revive Dev node + ETH-RPC adapter at 127.0.0.1:8545
 npx hardhat node
 ```
 
@@ -62,7 +62,7 @@ npx hardhat ignition deploy ./ignition/modules/MyToken.ts --network polkadotHubT
 ```
 
 Notes:
-- The `hardhat` network is configured to spawn a local Substrate node + ETH-RPC adapter for you. You can also target `localNode` at `http://127.0.0.1:8545`.
+- The `hardhat` network is configured to spawn a local Dev node + ETH-RPC adapter for you. You can also target `localNode` at `http://127.0.0.1:8545`.
 - Some Hardhat-only helpers (for example `time`, `loadFixture`) may not work with Polkadot nodes due to unsupported RPCs. Prefer plain ethers.js patterns for tests. See Hardhat docs for Polkadot for details.
 
 ### Foundry workflow
@@ -93,8 +93,8 @@ cast send <contract-or-recipient> <method-or-empty> \
 ```
 
 ### Local node
-- Start via Hardhat: `npx hardhat node` (spawns Substrate node on 127.0.0.1:8000 and ETH-RPC adapter on 127.0.0.1:8545).
-- The Hardhat network `hardhat` uses the bundled binaries (`substrate-node`, `eth-rpc`) from the container.
+- Start via Hardhat: `npx hardhat node` (spawns Dev node on 127.0.0.1:8000 and ETH-RPC adapter on 127.0.0.1:8545).
+- The Hardhat network `hardhat` uses the bundled binaries (`dev-node`, `eth-rpc`) from the container.
 - When running on Apple Silicon, the container uses amd64 binaries under emulation; expect slower performance.
 
 ### Accounts, faucet, and balances

@@ -11,7 +11,7 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Fetch `substrate-node` and `eth-rpc` binaries TODO! grab from latest stable release (need to wait on this until next release actually runs)
+# Fetch `dev-node` and `eth-rpc` binaries.
 RUN wget -q -O /usr/local/bin/dev-node \
       https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-latest/revive-dev-node-linux-x64 && \
     wget -q -O /usr/local/bin/eth-rpc \

@@ -2,28 +2,25 @@
 if ! compgen -G "$PROJECT_DIR/hardhat.config.*" > /dev/null; then
     echo -e "${YELLOW}📦 Initializing new Polkadot Hardhat project...${STYLE_END}"
     echo -e "${GREEN}✓ Copying project template files...${STYLE_END}"
-    
-    # Fetch template project
-    REPO="https://github.com/paritytech/smart-contracts-devcontainer.git"
-    SUBDIR=".devcontainer/init-hardhat"
-    DEST="$PROJECT_DIR"
-    TMP="$(mktemp -d)"
-    git clone --depth=1 --filter=blob:none --sparse "$REPO" "$TMP"
-    git -C "$TMP" sparse-checkout set "$SUBDIR"
-    cp -a "$TMP/$SUBDIR/." "$DEST/"
-    rm -rf "$TMP"
 
     # Change to project directory
     cd $PROJECT_DIR
-    
+
     # Install dependencies
-    echo -e "${GREEN}✓ Installing dependencies (this may take a few minutes)...${STYLE_END}"
-    npm install
-    
-    # Update @parity/hardhat-polkadot to latest version
-    echo -e "${GREEN}✓ Updating @parity/hardhat-polkadot to latest version...${STYLE_END}"
-    npm install --save-dev @parity/hardhat-polkadot@latest
-    
+    echo -e "${GREEN}✓ Initializing npm project ...${STYLE_END}"
+    npm init -y
+
+    # Install the latest version of @parity/hardhat-polkadot and solc@0.8.28
+    echo -e "${GREEN}✓ Installing @parity/hardhat-polkadot@latest and solc@0.8.28...${STYLE_END}"
+    npm install --save-dev @parity/hardhat-polkadot@latest solc@0.8.28
+
+    echo -e "${GREEN}✓ Initializing default hardhat-polkadot typescript project...${STYLE_END}"
+    npx hardhat-polkadot init -y
+
+    echo -e "${GREEN}✓ Copying dev-node and eth-rpc binaries...${STYLE_END}"
+    cp /usr/local/bin/dev-node /usr/local/bin/eth-rpc $PROJECT_DIR/bin/
+    chmod +x $PROJECT_DIR/bin/*
+
     echo -e "${GREEN}✨ Project initialized successfully!${STYLE_END}"
     echo -e "${BLUE}You can now:${STYLE_END}"
     echo -e "  - Create contracts in the ${GREEN}contracts/${STYLE_END} folder"
