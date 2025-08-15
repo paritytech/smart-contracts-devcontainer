@@ -11,13 +11,6 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Fetch `substrate-node` and `eth-rpc` binaries TODO! grab from latest stable release (need to wait on this until next release actually runs)
-RUN wget -q -O /usr/local/bin/substrate-node \
-      http://releases.parity.io/substrate-node/polkadot-stable2555-rc5/x86_64-unknown-linux-gnu/substrate-node && \
-    wget -q -O /usr/local/bin/eth-rpc \
-      http://releases.parity.io/eth-rpc/polkadot-stable2555-rc5/x86_64-unknown-linux-gnu/eth-rpc && \
-    chmod +x /usr/local/bin/substrate-node /usr/local/bin/eth-rpc
-
 USER vscode
 ARG USER_HOME=/home/vscode
 WORKDIR $USER_HOME

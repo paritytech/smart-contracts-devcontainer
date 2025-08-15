@@ -24,7 +24,7 @@ EVM_ADDRESS=$(cast wallet address --private-key "$SECRET")
 # TODO! Checking project type should be a function in 
 #       constants.sh (rename commons.sh) since we do this in multiple scripts
 if compgen -G "$PROJECT_DIR/hardhat.config.*" > /dev/null; then
-    npx hardhat vars set TEST_ACC_PRIVATE_KEY $SECRET
+    npx hardhat vars set PRIVATE_KEY $SECRET
 elif compgen -G "$PROJECT_DIR/foundry.toml" > /dev/null; then
     rm -rf "$HOME/.foundry/keystores/paseo"
     cast wallet import --private-key $SECRET paseo --unsafe-password ""
