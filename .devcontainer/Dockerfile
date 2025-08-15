@@ -1,7 +1,7 @@
 # Image w/ precompiled subkey binary
 FROM --platform=linux/amd64 parity/subkey:latest AS subkey-bin
 # DevContainer Image
-FROM --platform=linux/amd64 mcr.microsoft.com/devcontainers/base:bullseye
+FROM --platform=linux/amd64 mcr.microsoft.com/devcontainers/base:bookworm
 
 # Install Node.js 22 and required tools
 RUN apt-get update && \
