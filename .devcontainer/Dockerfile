@@ -11,13 +11,6 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Fetch `dev-node` and `eth-rpc` binaries.
-RUN wget -q -O /usr/local/bin/dev-node \
-      https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-latest/revive-dev-node-linux-x64 && \
-    wget -q -O /usr/local/bin/eth-rpc \
-      https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-latest/eth-rpc-linux-x64 && \
-    chmod +x /usr/local/bin/dev-node /usr/local/bin/eth-rpc
-
 USER vscode
 ARG USER_HOME=/home/vscode
 WORKDIR $USER_HOME

@@ -17,9 +17,23 @@ if ! compgen -G "$PROJECT_DIR/hardhat.config.*" > /dev/null; then
     echo -e "${GREEN}✓ Initializing default hardhat-polkadot typescript project...${STYLE_END}"
     npx hardhat-polkadot init -y
 
-    echo -e "${GREEN}✓ Copying dev-node and eth-rpc binaries...${STYLE_END}"
-    cp /usr/local/bin/dev-node /usr/local/bin/eth-rpc $PROJECT_DIR/bin/
+    echo -e "${GREEN}✓ Downloading dev-node and eth-rpc binaries...${STYLE_END}"
+
+    # Create bin directory if it doesn't exist
+    mkdir -p $PROJECT_DIR/bin/
+
+    # Download dev-node binary
+    wget -q --show-progress -O $PROJECT_DIR/bin/dev-node \
+        https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-latest/revive-dev-node-linux-x64
+
+    # Download eth-rpc binary
+    wget -q --show-progress -O $PROJECT_DIR/bin/eth-rpc \
+        https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-latest/eth-rpc-linux-x64
+
+    # Make them executable
     chmod +x $PROJECT_DIR/bin/*
+
+    echo -e "${GREEN}✓ Binaries downloaded successfully!${STYLE_END}"
 
     echo -e "${GREEN}✨ Project initialized successfully!${STYLE_END}"
     echo -e "${BLUE}You can now:${STYLE_END}"
