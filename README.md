@@ -21,6 +21,11 @@ Option A — bring this DevContainer into any repo/folder (recommended):
 curl -fsSL https://raw.githubusercontent.com/paritytech/smart-contracts-devcontainer/main/.devcontainer/fetch-devcontainer.sh | bash -s --
 ```
 
+To use a particular branch, just specify that as an argument:
+```bash
+curl -fsSL https://raw.githubusercontent.com/paritytech/smart-contracts-devcontainer/simplify-fetch-script/.devcontainer/fetch-devcontainer.sh | bash -s -- develop
+```
+
 Then open the folder in VS Code and “Reopen in Container”. On first attach, choose **Hardhat** or **Foundry** when prompted.
 
 Option B — clone this template repo and open in VS Code:
@@ -30,7 +35,7 @@ Option B — clone this template repo and open in VS Code:
    - Hardhat: a full sample project is copied and dependencies are installed.
    - Foundry: a new `forge` project is initialized.
 4. A dev ECDSA keypair is generated/imported and configured automatically:
-   - For Hardhat: stored via `hardhat vars` as `TEST_ACC_PRIVATE_KEY`.
+   - For Hardhat: stored via `hardhat vars` as `PRIVATE_KEY`.
    - For Foundry: imported into the local keystore as the `paseo` account.
 5. Use the workflows below to compile, test, run a local node, and deploy.
 
