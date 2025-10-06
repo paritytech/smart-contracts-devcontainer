@@ -1,10 +1,16 @@
+TARGET_DIR="$2"
+if [[ -z "$TARGET_DIR" ]]; then
+    echo "Usage: $0 $1 <dir>"
+    exit 1
+fi
+
 # Check if the mounted directory is empty or needs initialization
-if ! compgen -G "$PROJECT_DIR/hardhat.config.*" > /dev/null; then
+if ! compgen -G "$TARGET_DIR/hardhat.config.*" > /dev/null; then
     echo -e "${YELLOW}📦 Initializing new Polkadot Hardhat project...${STYLE_END}"
     echo -e "${GREEN}✓ Copying project template files...${STYLE_END}"
 
     # Change to project directory
-    cd $PROJECT_DIR
+    cd $TARGET_DIR
 
     # Install dependencies
     echo -e "${GREEN}✓ Initializing npm project ...${STYLE_END}"
@@ -20,18 +26,18 @@ if ! compgen -G "$PROJECT_DIR/hardhat.config.*" > /dev/null; then
     echo -e "${GREEN}✓ Downloading dev-node and eth-rpc binaries...${STYLE_END}"
 
     # Create bin directory if it doesn't exist
-    mkdir -p $PROJECT_DIR/bin/
+    mkdir -p $TARGET_DIR/bin/
 
     # Download dev-node binary
-    wget -q --show-progress -O $PROJECT_DIR/bin/dev-node \
+    wget -q --show-progress -O $TARGET_DIR/bin/dev-node \
         https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-latest/revive-dev-node-linux-x64
 
     # Download eth-rpc binary
-    wget -q --show-progress -O $PROJECT_DIR/bin/eth-rpc \
+    wget -q --show-progress -O $TARGET_DIR/bin/eth-rpc \
         https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-latest/eth-rpc-linux-x64
 
     # Make them executable
-    chmod +x $PROJECT_DIR/bin/*
+    chmod +x $TARGET_DIR/bin/*
 
     echo -e "${GREEN}✓ Binaries downloaded successfully!${STYLE_END}"
 
@@ -46,7 +52,7 @@ if ! compgen -G "$PROJECT_DIR/hardhat.config.*" > /dev/null; then
 else
     # TODO! for existing projects we should still inject PolkaVM specific configurations into hardhat.config.*
     echo -e "${GREEN}✓ Existing Hardhat project detected${STYLE_END}"
-    cd $PROJECT_DIR
+    cd $TARGET_DIR
     
     # Check and update @parity/hardhat-polkadot if needed
     if npm list @parity/hardhat-polkadot &>/dev/null; then

@@ -1,6 +1,6 @@
-PROJECT_TYPE="$1"
+PROJECT_TYPE="$2"
 if [[ -z "$PROJECT_TYPE" || ! "$PROJECT_TYPE" =~ ^(hardhat|foundry)$ ]]; then
-    echo "Usage: $0 <hardhat|foundry>"
+    echo "Usage: $0 $1 <hardhat|foundry>"
     exit 1
 fi
 

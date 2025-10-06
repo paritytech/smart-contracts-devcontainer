@@ -7,28 +7,38 @@ if [ -d "$HOME/.devtools" ]; then
 fi
 mkdir -p "$HOME/.devtools"
 
-# Determine project type (detect existing or prompt for (h)ardhat or (f)oundry)
-if compgen -G "$PROJECT_DIR/hardhat.config.*" > /dev/null; then
-    PROJECT_TYPE="hardhat"
-elif compgen -G "$PROJECT_DIR/foundry.toml" > /dev/null; then
-    PROJECT_TYPE="foundry"
+# Find all existing projects
+hardhat_projects=$(devtools detect-projects hardhat)
+foundry_projects=$(devtools detect-projects foundry)
+n_projects=$(echo $hardhat_projects $foundry_projects | wc -w)
+
+if [ "$n_projects" -gt 0 ]; then
+    # Setup existing projects
+    echo "$hardhat_projects" | while read -r directory; do
+        source devtools init-hardhat "$directory"
+    done
+    echo "$foundry_projects" | while read -r directory; do
+        source devtools init-foundry "$directory"
+    done
 else
+    # No existing projects found, create new project
     while true; do
-      read -n 1 -r -p "Initialize (h)ardhat or (f)oundry? [h/f] " ans
+      read -n 1 -r -p "Initialize (h)ardhat, (f)oundry, or (N)one? [h/f/n] " ans
       echo ""
       case "$ans" in
         [Hh]) PROJECT_TYPE="hardhat"; break ;;
         [Ff]) PROJECT_TYPE="foundry"; break ;;
-        *) echo "Please type 'h' or 'f'." ;;
+        [Nn]) break ;;
+        *) echo "Please type 'h', 'f', or 'n'." ;;
       esac
     done
-fi
 
-# Initialize based on project type
-if [ "$PROJECT_TYPE" = "hardhat" ]; then
-    source devtools init-hardhat
-else
-    source devtools init-foundry
+    # Initialize based on project type
+    if [ "$PROJECT_TYPE" = "hardhat" ]; then
+        source devtools init-hardhat $PROJECT_DIR
+    elif [ "$PROJECT_TYPE" = "foundry" ]; then
+        source devtools init-foundry
+    fi
 fi
 
 # Check if running under emulation
