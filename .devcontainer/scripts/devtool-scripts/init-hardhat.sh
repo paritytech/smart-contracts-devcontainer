@@ -40,7 +40,6 @@ if ! compgen -G "$TARGET_DIR/hardhat.config.*" > /dev/null; then
     chmod +x $TARGET_DIR/bin/*
 
     echo -e "${GREEN}✓ Binaries downloaded successfully!${STYLE_END}"
-
     echo -e "${GREEN}✨ Project initialized successfully!${STYLE_END}"
     echo -e "${BLUE}You can now:${STYLE_END}"
     echo -e "  - Create contracts in the ${GREEN}contracts/${STYLE_END} folder"
@@ -50,14 +49,26 @@ if ! compgen -G "$TARGET_DIR/hardhat.config.*" > /dev/null; then
     echo -e "  - Run ${GREEN}npx hardhat test${STYLE_END} to run tests"
     echo ""
 else
-    # TODO! for existing projects we should still inject PolkaVM specific configurations into hardhat.config.*
-    echo -e "${GREEN}✓ Existing Hardhat project detected${STYLE_END}"
+    # Handle existing project
     cd $TARGET_DIR
+
+    # Migrate code if necessary
+    if ! jq -e --arg name "@parity/hardhat-polkadot" \
+     '(.dependencies?[$name] // .devDependencies?[$name])' package.json >/dev/null
+    then
+        npx @parity/hardhat-polkadot port "$TARGET_DIR" -y
+    fi
+
+    # Fetch binaries
+    mkdir -p $TARGET_DIR/bin/
+    wget -q --show-progress -O $TARGET_DIR/bin/dev-node \
+        https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-latest/revive-dev-node-linux-x64
+    wget -q --show-progress -O $TARGET_DIR/bin/eth-rpc \
+        https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-latest/eth-rpc-linux-x64
+    chmod +x $TARGET_DIR/bin/*
     
-    # Check and update @parity/hardhat-polkadot if needed
+    # Check and update @parity/hardhat-polkadot if needed (TODO! should ask permission)
     if npm list @parity/hardhat-polkadot &>/dev/null; then
-        echo -e "${GREEN}✓ Checking for @parity/hardhat-polkadot updates...${STYLE_END}"
-        # Get current and latest versions
         CURRENT_VERSION=$(npm list @parity/hardhat-polkadot --depth=0 --json 2>/dev/null | grep -oP '"version":\s*"\K[^"]+' | head -1)
         LATEST_VERSION=$(npm view @parity/hardhat-polkadot version 2>/dev/null)
         
@@ -65,8 +76,6 @@ else
             echo -e "${YELLOW}📦 Updating @parity/hardhat-polkadot from v${CURRENT_VERSION} to v${LATEST_VERSION}...${STYLE_END}"
             npm install --save-dev @parity/hardhat-polkadot@latest
             echo -e "${GREEN}✓ Updated successfully!${STYLE_END}"
-        else
-            echo -e "${GREEN}✓ @parity/hardhat-polkadot is already at the latest version (v${CURRENT_VERSION})${STYLE_END}"
         fi
     fi
 fi

@@ -7,21 +7,67 @@ if [ -d "$HOME/.devtools" ]; then
 fi
 mkdir -p "$HOME/.devtools"
 
-# Find all existing projects
+# Find & initialize all existing projects
 hardhat_projects=$(devtools detect-projects hardhat)
 foundry_projects=$(devtools detect-projects foundry)
 n_projects=$(echo $hardhat_projects $foundry_projects | wc -w)
 
-if [ "$n_projects" -gt 0 ]; then
-    # Setup existing projects
-    echo "$hardhat_projects" | while read -r directory; do
-        source devtools init-hardhat "$directory"
+# Hardhat: Find which projects need migration & present UI
+needs_migration=()
+if [ $(echo $hardhat_projects | wc -w) -gt 0 ]; then
+    echo -e "${PINK}┌${STYLE_END} \033[48;2;208;75;208m Hardhat ${STYLE_END} Projects Detected"
+    echo -e "${PINK}│${STYLE_END}"
+    while read -r directory; do
+        if ! jq -e --arg name "@parity/hardhat-polkadot" \
+        '(.dependencies?[$name] // .devDependencies?[$name])' $directory/package.json >/dev/null
+        then
+            echo -e "${PINK}├${STYLE_END} $YELLOW▲$STYLE_END $directory"
+            needs_migration+=("$directory")
+        else
+            echo -e "${PINK}├${STYLE_END} $GREEN●$STYLE_END $directory"
+        fi
+    done <<< "$hardhat_projects"
+    echo ""
+fi
+
+# Foundry: present UI
+if [ $(echo $foundry_projects | wc -w) -gt 0 ]; then
+    echo -e "${PINK}┌${STYLE_END} \033[48;2;208;75;208m Foundry ${STYLE_END} Projects Detected"
+    echo -e "${PINK}│${STYLE_END}"
+    while read -r directory; do
+        echo -e "${PINK}├${STYLE_END} $GREEN●$STYLE_END $directory"
+    done <<< "$foundry_projects"
+    echo ""
+fi
+
+# Apply migrations if needed
+if [ ${#needs_migration[@]} -gt 0 ]; then
+    while true; do
+        echo -e "$YELLOW$BOLD${#needs_migration[@]}$STYLE_END detected hardhat project(s) are incompatible with the Polkadot Ecosystem."
+        read -n 1 -r -p "Would you like to  apply auto-migrations to these projects? [y/n] " ans
+        echo ""
+        case "$ans" in
+        [Yy]) DO_MIGRATION="y"; break ;;
+        [Nn]) DO_MIGRATION="n"; break ;;
+        *) echo "Please type 'y' or 'n'." ;;
+        esac
     done
-    echo "$foundry_projects" | while read -r directory; do
-        source devtools init-foundry "$directory"
-    done
-else
-    # No existing projects found, create new project
+    if [ "$DO_MIGRATION" = "y" ]; then
+        for dir in "${needs_migration[@]}"; do
+            source devtools init-hardhat "$dir"
+            echo -e "${YELLOW}⚙️  Migrating project at $dir ...${STYLE_END}"
+            npx @parity/hardhat-polkadot port "$dir" -y
+            echo -e "${GREEN}✓ Migration complete for $dir${STYLE_END}"
+        done
+        echo ""
+    else
+        echo -e "${YELLOW}⚠️  Skipping migrations. You may need to manually update these projects later.${STYLE_END}"
+        echo ""
+    fi
+fi
+
+# If no existing projects found, create new project
+if [ "$n_projects" -eq 0 ]; then
     while true; do
       read -n 1 -r -p "Initialize (h)ardhat, (f)oundry, or (N)one? [h/f/n] " ans
       echo ""
@@ -33,7 +79,7 @@ else
       esac
     done
 
-    # Initialize based on project type
+    # Initialize based on selected project type
     if [ "$PROJECT_TYPE" = "hardhat" ]; then
         source devtools init-hardhat $PROJECT_DIR
     elif [ "$PROJECT_TYPE" = "foundry" ]; then
