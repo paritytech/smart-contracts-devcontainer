@@ -27,7 +27,7 @@ if compgen -G "$PROJECT_DIR/hardhat.config.*" > /dev/null; then
     npx hardhat vars set PRIVATE_KEY $SECRET
 elif compgen -G "$PROJECT_DIR/foundry.toml" > /dev/null; then
     rm -rf "$HOME/.foundry/keystores/paseo"
-    cast wallet import --private-key $SECRET paseo --unsafe-password ""
+    cast wallet import --private-key $SECRET --unsafe-password "" paseo
 fi
 
 # Output Message
