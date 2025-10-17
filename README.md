@@ -1,5 +1,7 @@
 ### Polkadot Smart Contracts DevContainer Template
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/paritytech/smart-contracts-devcontainer)
+
 A ready-to-code DevContainer for building, testing, and deploying smart contracts for Polkadot using either Hardhat or Foundry. It includes PolkaVM tooling, a local Dev node + ETH-RPC adapter, key management helpers, and opinionated defaults to get you productive fast.
 
 ### What’s inside
