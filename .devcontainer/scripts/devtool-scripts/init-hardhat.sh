@@ -24,11 +24,11 @@ if ! compgen -G "$PROJECT_DIR/hardhat.config.*" > /dev/null; then
 
     # Download dev-node binary
     wget -q --show-progress -O $PROJECT_DIR/bin/dev-node \
-        https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-latest/revive-dev-node-linux-x64
+        https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-19071579107/revive-dev-node-linux-x64
 
     # Download eth-rpc binary
     wget -q --show-progress -O $PROJECT_DIR/bin/eth-rpc \
-        https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-latest/eth-rpc-linux-x64
+        https://github.com/paritytech/hardhat-polkadot/releases/download/nodes-19071579107/eth-rpc-linux-x64
 
     # Make them executable
     chmod +x $PROJECT_DIR/bin/*
